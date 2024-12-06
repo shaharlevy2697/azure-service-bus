@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: subscriber
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: subscriber
+  template:
+    metadata:
+      labels:
+        app: subscriber
+    spec:
+      containers:
+      - name: subscriber
+        image: wsctaskforshahar.azurecr.io/sub:latest
+        env:
+        - name: CONNECTION_STR
+          value: "service-bus-connection-string"
+        - name: TOPIC_NAME
+          value: "job-topic"
+        - name: SUBSCRIPTION_NAME
+          value: "job-subscription"

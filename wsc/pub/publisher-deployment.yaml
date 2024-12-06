@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: publisher
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: publisher
+  template:
+    metadata:
+      labels:
+        app: publisher
+    spec:
+      containers:
+      - name: publisher
+        image: wsctaskforshahar.azurecr.io/pub:latest
+        env:
+        - name: CONNECTION_STR
+          value: "service-bus-connection-string"
+        - name: TOPIC_NAME
+          value: "job-topic"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: publisher-service
+spec:
+  selector:
+    app: publisher
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: ClusterIP
